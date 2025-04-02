@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Shopping Cart</h1>
+
+{% if cart %}
+<!-- Table to display cart items -->
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Custom Text</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through cart items -->
+            {% for item in cart %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.custom_text or 'N/A' }}</td> <!-- Display 'N/A' if no custom text -->
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ "%.2f"|format(item.total) }}</td> <!-- Format total price to two decimal places -->
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-end fw-bold">Grand Total:</td>
+                <td class="fw-bold">${{ "%.2f"|format(total) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<!-- Action buttons: Continue Shopping & Checkout -->
+<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Continue Shopping
+    </a>
+    <a href="#" class="btn btn-success">
+        <i class="bi bi-credit-card"></i> Proceed to Checkout
+    </a>
+</div>
+
+{% else %}
+<!-- Message when the cart is empty -->
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> Your cart is empty.
+</div>
+
+<!-- Button to go shopping -->
+<a href="{{ url_for('home') }}" class="btn btn-primary">
+    <i class="bi bi-shop"></i> Go Shopping
+</a>
+
+{% endif %}
+{% endblock %}
